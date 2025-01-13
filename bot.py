@@ -33,7 +33,6 @@ def decode_base64(text):
     try:
         return base64.b64decode(text).decode("utf-8")
     except Exception as e:
-        print(f"Error decoding Base64 text: {e}")
         return text
 
 
@@ -53,7 +52,6 @@ def get_currency_rate(currency_iso):
             if rate['ISO'] == currency_iso:
                 return Decimal(rate['Rate'])
     except Exception as e:
-        print(f"Error fetching currency rate: {e}")
         return None
 
 
@@ -72,7 +70,6 @@ def get_crypto_rate(crypto_id):
             return data[crypto_id]["amd"]
         return None
     except Exception as e:
-        print(f"Error fetching crypto rate: {e}")
         return None
 
 
@@ -87,16 +84,13 @@ def get_updates():
             if updates.get("success") and updates.get("data"):
                 return updates["data"]
             else:
-                print("No updates available.")
+
                 return []
         elif response.status_code == 204:
-            print("No new updates (HTTP 204). Waiting for new messages...")
             return []
         else:
-            print(f"Failed to fetch updates. HTTP Status: {response.status_code}, Response: {response.text}")
             return []
     except Exception as e:
-        print(f"Error while fetching updates: {e}")
         return []
 
 
@@ -107,10 +101,6 @@ def send_message(chat_id, text):
     payload = {"to": chat_id, "text": text}
     try:
         response = requests.post(SEND_MESSAGE_URL, json=payload, headers=HEADERS)
-        if response.status_code == 200 and response.json().get("success"):
-            print(f"Message sent to {chat_id}: {text}")
-        else:
-            print(f"Failed to send message to {chat_id}: {response.json()}")
     except Exception as e:
         print(f"Error sending message: {e}")
 
@@ -120,8 +110,8 @@ def process_updates():
     Processes updates by decoding messages and sending appropriate responses.
     """
     updates = get_updates()
-    if not updates:
-        print("No updates to process.")
+    # if not updates:
+    #     print("No updates to process.")
     for message in updates:
         chat_id = message.get("chatId")
         encoded_text = message.get("text", "")
@@ -131,7 +121,6 @@ def process_updates():
         # Decode the Base64 message text
         text = decode_base64(encoded_text)
 
-        print(f"Processing message: {text} from {sender_name} (Chat ID: {chat_id})")
 
         # Respond based on the message content
         if text.lower() == "/start":
@@ -171,7 +160,6 @@ def process_updates():
 
 
 if __name__ == "__main__":
-    print("YoAI Rate Bot is running...")
 
     # Use polling to fetch updates
     while True:
