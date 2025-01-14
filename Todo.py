@@ -62,14 +62,14 @@ def send_message(chat_id, text):
     Sends a message to a specific chat ID via YoAI.
     """
     payload = {"to": chat_id, "text": text}
-    try:
-        response = requests.post(SEND_MESSAGE_URL, json=payload, headers=HEADERS)
-        if response.status_code == 200 and response.json().get("success"):
-            #print(f"Message sent to {chat_id}: {text}")
-        else:
-            #print(f"Failed to send message to {chat_id}: {response.json()}")
-    except Exception as e:
-        #print(f"Error sending message: {e}")
+    # try:
+    response = requests.post(SEND_MESSAGE_URL, json=payload, headers=HEADERS)
+    #     if response.status_code == 200 and response.json().get("success"):
+    #         #print(f"Message sent to {chat_id}: {text}")
+    #     else:
+    #         #print(f"Failed to send message to {chat_id}: {response.json()}")
+    # except Exception as e:
+    #     #print(f"Error sending message: {e}")
 
 
 def process_updates():
@@ -77,7 +77,7 @@ def process_updates():
     Processes updates by decoding messages and sending appropriate responses.
     """
     updates = get_updates()
-    if not updates:
+    # if not updates:
         #print("No updates to process.")
     for message in updates:
         chat_id = message.get("chatId")
