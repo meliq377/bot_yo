@@ -29,7 +29,7 @@ def decode_base64(text):
     try:
         return base64.b64decode(text).decode("utf-8")
     except Exception as e:
-        print(f"Error decoding Base64 text: {e}")
+        #print(f"Error decoding Base64 text: {e}")
         return text
 
 
@@ -44,16 +44,16 @@ def get_updates():
             if updates.get("success") and updates.get("data"):
                 return updates["data"]
             else:
-                print("No updates available.")
+                #print("No updates available.")
                 return []
         elif response.status_code == 204:
-            print("No new updates (HTTP 204). Waiting for new messages...")
+            #print("No new updates (HTTP 204). Waiting for new messages...")
             return []
         else:
-            print(f"Failed to fetch updates. HTTP Status: {response.status_code}, Response: {response.text}")
+            #print(f"Failed to fetch updates. HTTP Status: {response.status_code}, Response: {response.text}")
             return []
     except Exception as e:
-        print(f"Error while fetching updates: {e}")
+        #print(f"Error while fetching updates: {e}")
         return []
 
 
@@ -65,11 +65,11 @@ def send_message(chat_id, text):
     try:
         response = requests.post(SEND_MESSAGE_URL, json=payload, headers=HEADERS)
         if response.status_code == 200 and response.json().get("success"):
-            print(f"Message sent to {chat_id}: {text}")
+            #print(f"Message sent to {chat_id}: {text}")
         else:
-            print(f"Failed to send message to {chat_id}: {response.json()}")
+            #print(f"Failed to send message to {chat_id}: {response.json()}")
     except Exception as e:
-        print(f"Error sending message: {e}")
+        #print(f"Error sending message: {e}")
 
 
 def process_updates():
@@ -78,7 +78,7 @@ def process_updates():
     """
     updates = get_updates()
     if not updates:
-        print("No updates to process.")
+        #print("No updates to process.")
     for message in updates:
         chat_id = message.get("chatId")
         encoded_text = message.get("text", "")
@@ -88,7 +88,7 @@ def process_updates():
         # Decode the Base64 message text
         text = decode_base64(encoded_text)
 
-        print(f"Processing message: {text} from {sender_name} (Chat ID: {chat_id})")
+        #print(f"Processing message: {text} from {sender_name} (Chat ID: {chat_id})")
 
         # Respond based on the message content
         if text.lower() == "/start":
@@ -143,7 +143,7 @@ def check_upcoming_birthdays():
 
 
 if __name__ == "__main__":
-    print("BirthdayBot is running...")
+    #print("BirthdayBot is running...")
 
     # Use polling to fetch updates
     while True:
